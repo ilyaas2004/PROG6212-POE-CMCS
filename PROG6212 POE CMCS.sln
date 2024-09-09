@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34616.47
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PROG6212 POE CMCS", "PROG6212 POE CMCS.csproj", "{699DBF7E-DBF5-406D-A3AA-D2A418756E21}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{699DBF7E-DBF5-406D-A3AA-D2A418756E21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{699DBF7E-DBF5-406D-A3AA-D2A418756E21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{699DBF7E-DBF5-406D-A3AA-D2A418756E21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{699DBF7E-DBF5-406D-A3AA-D2A418756E21}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B5A591D-6B9E-46D1-97D5-03B1B01E53B3}
+	EndGlobalSection
+EndGlobal
