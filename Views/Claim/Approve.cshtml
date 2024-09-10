@@ -1,45 +1,50 @@
-﻿@model PROG6212_POE_CMCS.Models.Claim
+﻿@model IEnumerable<PROG6212_POE_CMCS.Models.Claim>
+
 @{
     ViewData["Title"] = "Approve or Reject Claims";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="text-center text-info">Approve or Reject Claims</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Lecturer</th>
-            <th>Hours Worked</th>
-            <th>Submission Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Placeholder for claim data -->
-        <tr>
-            <td>Lecturer 1</td>
-            <td>10</td>
-            <td>2024-09-01</td>
-            <td>Pending</td>
-            <td>
-                <button class="btn btn-success">Approve</button>
-                <button class="btn btn-danger">Reject</button>
-            </td>
-        </tr>
-        <tr>
-            <td>Lecturer 2</td>
-            <td>15</td>
-            <td>2024-09-05</td>
-            <td>Pending</td>
-            <td>
-                <button class="btn btn-success">Approve</button>
-                <button class="btn btn-danger">Reject</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="container mt-4">
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered shadow-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Lecturer</th>
+                    <th>Hours Worked</th>
+                    <th>Submission Date</th>
+                    <th>Status</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Lecturer 1</td>
+                    <td>10</td>
+                    <td>2024-09-01</td>
+                    <td><span class="badge badge-warning">Pending</span></td>
+                    <td class="text-center">
+                        <button class="btn btn-outline-success mr-2">Approve</button>
+                        <button class="btn btn-outline-danger">Reject</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Lecturer 2</td>
+                    <td>15</td>
+                    <td>2024-09-05</td>
+                    <td><span class="badge badge-warning">Pending</span></td>
+                    <td class="text-center">
+                        <button class="btn btn-outline-success mr-2">Approve</button>
+                        <button class="btn btn-outline-danger">Reject</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="text-center mt-3">
+    <a asp-action="Index" class="btn btn-outline-info">Back to List</a>
 </div>

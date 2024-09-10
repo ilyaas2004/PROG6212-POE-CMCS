@@ -1,38 +1,45 @@
 ﻿@model PROG6212_POE_CMCS.Models.Claim
 
-
+   
 @{
-    ViewData["Title"] = "Submit Claim";
+    ViewData["Title"] = "Submit a Claim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="text-center text-primary">Submit a New Claim</h2>
 
-<form asp-action="Create">
-    <div class="form-group">
-        <label asp-for="LecturerID" class="control-label">Lecturer</label>
-        <select asp-for="LecturerID" class="form-control">
-            <option value="">-- Select Lecturer --</option>
-            <!-- Add placeholder options for now; no database integration -->
-            <option value="1">Lecturer 1</option>
-            <option value="2">Lecturer 2</option>
-        </select>
+<div class="container mt-4">
+    <div class="card shadow-sm border-primary">
+        <div class="card-body">
+            <form asp-action="Create">
+                <div class="form-group">
+                    <label asp-for="LecturerID" class="control-label font-weight-bold text-primary">Lecturer</label>
+                    <select asp-for="LecturerID" class="form-control border-primary">
+                        <option value="">-- Select Lecturer --</option>
+                        <option value="1">Lecturer 1</option>
+                        <option value="2">Lecturer 2</option>
+                    </select>
+                </div>
+
+                <div class="form-group mt-3">
+                    <label asp-for="HoursWorked" class="control-label font-weight-bold text-primary">Hours Worked</label>
+                    <input asp-for="HoursWorked" class="form-control border-primary" placeholder="Enter hours worked" />
+                </div>
+
+                <div class="form-group mt-3">
+                    <label asp-for="SubmissionDate" class="control-label font-weight-bold text-primary">Submission Date</label>
+                    <input asp-for="SubmissionDate" type="date" class="form-control border-primary" />
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg">Submit Claim</button>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="HoursWorked" class="control-label">Hours Worked</label>
-        <input asp-for="HoursWorked" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="SubmissionDate" class="control-label">Submission Date</label>
-        <input asp-for="SubmissionDate" type="date" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <input type="submit" value="Submit Claim" class="btn btn-primary" />
-    </div>
-</form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
+
+<div class="text-center mt-3">
+    <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+</div>
+
