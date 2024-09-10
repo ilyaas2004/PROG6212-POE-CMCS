@@ -19,7 +19,7 @@ Clone the Repository Clone the project from GitHub using the following command:
 
 bash
 Copy code
-git clone https://github.com/yourusername/CMCS.git
+git clone https://github.com/ilyaas2004/PROG6212-POE-CMCS.git
 Open the Project in Visual Studio Navigate to the project folder and open the solution file (.sln) in Visual Studio.
 
 Restore Dependencies In Visual Studio, restore the project dependencies using the NuGet Package Manager.
