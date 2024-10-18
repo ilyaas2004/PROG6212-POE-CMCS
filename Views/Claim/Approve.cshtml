@@ -20,31 +20,26 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Lecturer 1</td>
-                    <td>10</td>
-                    <td>2024-09-01</td>
-                    <td><span class="badge badge-warning">Pending</span></td>
-                    <td class="text-center">
-                        <button class="btn btn-outline-success mr-2">Approve</button>
-                        <button class="btn btn-outline-danger">Reject</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Lecturer 2</td>
-                    <td>15</td>
-                    <td>2024-09-05</td>
-                    <td><span class="badge badge-warning">Pending</span></td>
-                    <td class="text-center">
-                        <button class="btn btn-outline-success mr-2">Approve</button>
-                        <button class="btn btn-outline-danger">Reject</button>
-                    </td>
-                </tr>
+                @foreach (var claim in Model)
+                {
+                    <tr>
+                        <td>@claim.Lecturer.Name</td>
+                        <td>@claim.HoursWorked</td>
+                        <td>@claim.SubmissionDate.ToString("yyyy-MM-dd")</td>
+                        <td>@claim.Status</td>
+                        <td class="text-center">
+                            <form asp-action="ApproveClaim" method="post" class="d-inline">
+                                <input type="hidden" name="claimId" value="@claim.ClaimId" />
+                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                            </form>
+                            <form asp-action="RejectClaim" method="post" class="d-inline">
+                                <input type="hidden" name="claimId" value="@claim.ClaimId" />
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
-</div>
-
-<div class="text-center mt-3">
-    <a asp-action="Index" class="btn btn-outline-info">Back to List</a>
 </div>

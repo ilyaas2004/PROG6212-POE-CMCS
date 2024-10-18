@@ -1,52 +1,115 @@
+/* Base Styles */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
-}
-
-body {
+    margin-bottom: 60px;
     background-color: #f8f9fa; /* Light background for a modern look */
+    font-family: 'Open Sans', sans-serif; /* Apply the chosen font */
 }
 
+/* Focus and Active States */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+/* Headings */
 h2 {
     margin-bottom: 20px;
+    color: #007bff; /* Bootstrap primary color */
 }
 
+/* Card Styles */
 .card {
     border-radius: 10px; /* Rounded card borders */
 }
 
+/* Button Styles */
 .btn-lg {
     padding: 10px 20px;
+    border-radius: 5px; /* Rounded button corners */
+    transition: background-color 0.3s, transform 0.3s; /* Add transition for effects */
 }
 
+.btn-success {
+    background-color: #28a745; /* Green for success */
+    border: none; /* Remove default border */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Red for danger */
+    border: none; /* Remove default border */
+}
+
+/* Hover Effects */
+.btn-success:hover {
+    background-color: #218838; /* Darker green on hover */
+    transform: scale(1.05); /* Scale up on hover */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Darker red on hover */
+    transform: scale(1.05); /* Scale up on hover */
+}
+
+/* Table Styles */
 .table {
     border-radius: 10px;
     overflow: hidden;
 }
 
 .table-hover tbody tr:hover {
-    background-color: #f1f1f1;
+    background-color: #f1f1f1; /* Light gray on hover */
 }
 
+/* Badge Styles */
 .badge-warning {
     font-size: 14px;
     padding: 5px 10px;
+}
+
+/* Icons */
+.btn i {
+    margin-right: 5px; /* Space between icon and text */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .card {
+        margin: 10px 0; /* Reduce margin on smaller screens */
+    }
+
+    .table {
+        font-size: 14px; /* Slightly smaller text in tables */
+    }
+}
+
+/* Footer Styles */
+footer {
+    background-color: #343a40; /* Dark background for footer */
+    color: white;
+    padding: 20px 0;
+    text-align: center; /* Center footer text */
+}
+
+/* Additional Improvements */
+.text-center {
+    margin: 20px 0; /* Space above and below centered text */
+}
+
+/* Form Styles */
+.form-control {
+    border-radius: 5px; /* Rounded form inputs */
+}
+
+/* Ensure color contrast for accessibility */
+.text-dark {
+    color: #343a40; /* Dark text for better contrast */
 }

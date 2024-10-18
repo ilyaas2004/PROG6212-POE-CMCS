@@ -1,6 +1,6 @@
 ﻿@model PROG6212_POE_CMCS.Models.Claim
 
-   
+
 @{
     ViewData["Title"] = "Submit a Claim";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,15 +11,20 @@
 <div class="container mt-4">
     <div class="card shadow-sm border-primary">
         <div class="card-body">
-            <form asp-action="Create">
+            <form asp-action="Create" enctype="multipart/form-data">
                 <div class="form-group">
                     <label asp-for="LecturerID" class="control-label font-weight-bold text-primary">Lecturer</label>
                     <select asp-for="LecturerID" class="form-control border-primary">
                         <option value="">-- Select Lecturer --</option>
-                        <option value="1">Lecturer 1</option>
-                        <option value="2">Lecturer 2</option>
+                        @foreach (var lecturer in ViewBag.Lecturers)
+                        {
+                            <option value="@lecturer.LecturerID">@lecturer.Name</option>
+                        }
                     </select>
                 </div>
+
+
+               
 
                 <div class="form-group mt-3">
                     <label asp-for="HoursWorked" class="control-label font-weight-bold text-primary">Hours Worked</label>
@@ -31,6 +36,12 @@
                     <input asp-for="SubmissionDate" type="date" class="form-control border-primary" />
                 </div>
 
+                <!-- Document upload field -->
+                <div class="form-group mt-3">
+                    <label class="control-label font-weight-bold text-primary">Upload Supporting Document</label>
+                    <input type="file" name="supportingDocument" class="form-control-file border-primary" required />
+                </div>
+
                 <div class="text-center mt-4">
                     <button type="submit" class="btn btn-success btn-lg">Submit Claim</button>
                 </div>
@@ -40,6 +51,6 @@
 </div>
 
 <div class="text-center mt-3">
-    <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+    <a asp-action="Index" controller="Claim" class="btn btn-outline-primary">Back to List</a>
 </div>
 

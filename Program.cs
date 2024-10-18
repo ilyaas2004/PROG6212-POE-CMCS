@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using PROG6212_POE_CMCS.Models; // Ensure you have the correct namespace for your models
+
 namespace PROG6212_POE_CMCS
 {
     public class Program
@@ -5,6 +8,10 @@ namespace PROG6212_POE_CMCS
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add DbContext with connection string from appsettings.json
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -26,6 +33,7 @@ namespace PROG6212_POE_CMCS
 
             app.UseAuthorization();
 
+            // Map controller routes
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

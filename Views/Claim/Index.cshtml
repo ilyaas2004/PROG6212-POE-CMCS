@@ -27,7 +27,7 @@
                             <td>@claim.Lecturer.Name</td>
                             <td>@claim.HoursWorked</td>
                             <td>@claim.SubmissionDate.ToString("yyyy-MM-dd")</td>
-                            <td>@claim.Status</td>
+                            <td>@((ClaimStatus)claim.Status).ToString()</td>
                             <td>
                                 @if (!string.IsNullOrEmpty(claim.DocumentPath))
                                 {
