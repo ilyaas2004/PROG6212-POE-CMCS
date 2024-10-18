@@ -7,6 +7,35 @@ Features
 Lecturer Claim Submission: Lecturers can submit claims by entering hours worked and uploading supporting documents.
 Coordinator/Manager Claim Approval: Coordinators or managers can view, approve, or reject submitted claims.
 Document Upload: Lecturers can upload supporting documents, such as work reports or timesheets, to their claims.
+
+Part 2: Contract Monthly Claim System (CMCS)
+Overview
+This project aims to enhance the functionality of a Contract Monthly Claim System (CMCS) for managing claims submitted by lecturers. Part 2 focuses on implementing key features such as claim submission, approval, rejection, and document management, with an emphasis on improving user experience and system reliability.
+
+Features
+Claim Submission:
+
+Lecturers can submit claims by providing necessary details, including hours worked, submission date, and a supporting document.
+A document upload feature allows lecturers to attach relevant files to their claims.
+Claim Management:
+
+Academic managers can view all submitted claims and take appropriate actions (approve/reject).
+The system tracks the status of each claim, with statuses including Pending, Approved, and Rejected.
+Document Handling:
+
+Supports uploading and storing supporting documents securely.
+Provides a link to view the uploaded documents directly from the claims list.
+User Interface:
+
+A user-friendly interface for both lecturers and academic managers to navigate and perform actions efficiently.
+Technologies Used
+ASP.NET Core MVC: For building the web application.
+Entity Framework Core: For database interactions and data management.
+SQL Server: For storing claim and lecturer data.
+HTML/CSS: For styling the application and enhancing the user interface.
+
+
+
 Setup Instructions
 Prerequisites
 To run the project locally, you will need the following:
