@@ -25,6 +25,8 @@ Document Handling:
 
 Supports uploading and storing supporting documents securely.
 Provides a link to view the uploaded documents directly from the claims list.
+
+i have also created a database using SSMS and stored the data from the web app in there.
 User Interface:
 
 A user-friendly interface for both lecturers and academic managers to navigate and perform actions efficiently.
