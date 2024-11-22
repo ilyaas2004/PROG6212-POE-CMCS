@@ -25,6 +25,7 @@ namespace PROG6212_POE_CMCS.Models
         [Required]
         public ClaimStatus Status { get; set; } = ClaimStatus.Pending; // Set default status to Pending
 
+        public decimal FinalPayment { get; set; }
         public string? DocumentPath { get; set; }  // Nullable document path
     }
 

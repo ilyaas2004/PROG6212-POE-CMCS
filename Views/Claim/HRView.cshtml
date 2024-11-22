@@ -1,0 +1,53 @@
+﻿@model IEnumerable<PROG6212_POE_CMCS.Models.Claim>
+
+@{
+    ViewData["Title"] = "HR Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center text-primary">HR Dashboard</h2>
+
+<div class="container mt-4">
+    <h4 class="text-success">Approved Claims</h4>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered shadow-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Lecturer</th>
+                    <th>Hours Worked</th>
+                    <th>Hourly Rate</th>
+                    <th>Submission Date</th>
+                    <th>Final Payment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var claim in Model)
+                {
+                    <tr>
+                        <td>@claim.Lecturer.Name</td>
+                        <td>@claim.HoursWorked</td>
+                        <td>@claim.Lecturer.HourlyRate.ToString("C")</td>
+                        <td>@claim.SubmissionDate.ToString("yyyy-MM-dd")</td>
+                        <td>@claim.FinalPayment.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <h4 class="text-success">Summary Report</h4>
+    <p>Total Claims Approved: <strong>@Model.Count()</strong></p>
+    <p>
+        Total Amount to be Paid:
+        <strong>@Model.Sum(c => c.FinalPayment).ToString("C")</strong>
+    </p>
+
+    <hr />
+
+    <h4 class="text-primary">Manage Lecturer Data</h4>
+    <a class="btn btn-info" asp-controller="Lecturer" asp-action="Index">Manage Lecturers</a>
+    
+
+</div>

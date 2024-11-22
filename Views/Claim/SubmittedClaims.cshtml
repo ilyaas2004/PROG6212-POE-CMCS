@@ -16,6 +16,7 @@
                         <th>Lecturer</th>
                         <th>Hours Worked</th>
                         <th>Submission Date</th>
+                        <th>Final Payment</th>
                         <th>Status</th>
                         <th>Document</th>
                     </tr>
@@ -27,7 +28,8 @@
                             <td>@claim.Lecturer.Name</td>
                             <td>@claim.HoursWorked</td>
                             <td>@claim.SubmissionDate.ToString("yyyy-MM-dd")</td>
-                            <td>@((ClaimStatus)claim.Status).ToString()</td>
+                            <td>@claim.FinalPayment.ToString("C")</td> <!-- Display Final Payment -->
+                            <td>@claim.Status</td>
                             <td>
                                 @if (!string.IsNullOrEmpty(claim.DocumentPath))
                                 {
@@ -50,7 +52,4 @@
     }
 </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+

@@ -5,6 +5,14 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using iText.IO.Image;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using ApplicationDocument = PROG6212_POE_CMCS.Models.Document;  // Alias your custom Document
+using iTextDocument = iText.Layout.Document;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PROG6212_POE_CMCS.Controllers
 {
@@ -21,7 +29,7 @@ namespace PROG6212_POE_CMCS.Controllers
             _logger = logger;
             _configuration = configuration;
         }
-
+        [Authorize(Roles = "Lecturer")]
         // GET: /Claim/Create
         public IActionResult Create()
         {
@@ -34,104 +42,136 @@ namespace PROG6212_POE_CMCS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Claim claim, IFormFile supportingDocument)
         {
-            // Check if the model state is valid
             if (ModelState.IsValid)
             {
-                // Check if a document was uploaded
+                // Check if the lecturer already exists
+                var lecturer = _context.Lecturers.FirstOrDefault(l => l.Name == claim.Lecturer.Name);
+
+                if (lecturer == null)
+                {
+                    // Create a new lecturer if they don't exist
+                    lecturer = new Lecturer
+                    {
+                        Name = claim.Lecturer.Name,
+                        HourlyRate = claim.Lecturer.HourlyRate
+                    };
+                    _context.Lecturers.Add(lecturer);
+                    await _context.SaveChangesAsync(); // Save lecturer to get LecturerID
+                }
+
+                // Link the claim to the lecturer
+                claim.LecturerID = lecturer.LecturerID;
+
+                // Calculate the final payment (assuming it's client-side validated)
+                claim.FinalPayment = claim.HoursWorked * lecturer.HourlyRate;
+
+                // Handle document upload
                 if (supportingDocument != null && supportingDocument.Length > 0)
                 {
-                    try
+                    var uploadPath = Path.Combine(_configuration["UploadSettings:UploadPath"], supportingDocument.FileName);
+                    using (var stream = new FileStream(uploadPath, FileMode.Create))
                     {
-                        // Specify the upload path (use configuration for flexibility)
-                        var uploadPath = Path.Combine(
-                            _configuration["UploadSettings:UploadPath"] ?? string.Empty,
-                            supportingDocument.FileName
-                        );
-
-                        // Save the uploaded file
-                        using (var stream = new FileStream(uploadPath, FileMode.Create))
-                        {
-                            await supportingDocument.CopyToAsync(stream);
-                        }
-
-                        // Set the document path in the claim
-                        claim.DocumentPath = uploadPath;
-
-                        // Set initial status and submission date using the enum
-                        claim.Status = ClaimStatus.Pending; // Directly use the enum
-                        claim.SubmissionDate = DateTime.Now; // Set submission date
+                        await supportingDocument.CopyToAsync(stream);
                     }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "Error occurred while uploading the document.");
-                        ModelState.AddModelError("", "An error occurred while processing your request. Please try again.");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("supportingDocument", "A supporting document is required.");
+                    claim.DocumentPath = uploadPath; // Store document path in the claim
                 }
 
-                // If everything is valid, add the claim to the context
-                if (ModelState.IsValid)
-                {
-                    _context.Claims.Add(claim);
-                    await _context.SaveChangesAsync(); // Save changes to the database
-                    return RedirectToAction(nameof(Index)); // Redirect to the Index action
-                }
+                // Set additional claim fields
+                claim.Status = ClaimStatus.Pending; // Default status
+                claim.SubmissionDate = DateTime.Now; // Set submission date
+
+                // Save the claim to the database
+                _context.Claims.Add(claim);
+                await _context.SaveChangesAsync();
+
+                // Redirect to the list of claims (Index action)
+                return RedirectToAction(nameof(Index));
             }
 
-            // If model state is invalid, fetch lecturers again for the view
-            ViewBag.Lecturers = _context.Lecturers.ToList();
-            return View(claim); // Return to the Create view with the current claim data
+            // If model state is not valid, return the view with validation errors
+            return View(claim);
+        }
+        [Authorize(Roles = "Admin, ProgramCoordinator")]
+        public IActionResult Approve()
+        {
+            var claims = _context.Claims.Include(c => c.Lecturer).ToList(); // Include Lecturer details
+            return View(claims);
         }
 
-        // POST: /Claim/ApproveClaim
+        // POST: Approve Claim
         [HttpPost]
         public async Task<IActionResult> ApproveClaim(int claimId)
         {
-            var claim = await _context.Claims.FindAsync(claimId); // Find the claim by ID
+            var claim = await _context.Claims.Include(c => c.Lecturer).FirstOrDefaultAsync(c => c.ClaimId == claimId);
+
             if (claim != null)
             {
-                claim.Status = ClaimStatus.Approved; // Set status to Approved using enum
-                await _context.SaveChangesAsync(); // Save changes to the database
-                _logger.LogInformation($"Claim {claim.ClaimId} approved by manager on {DateTime.Now}."); // Log approval
+                // Validate the claim before approval
+                if (claim.HoursWorked <= 0 || claim.Lecturer.HourlyRate <= 0)
+                {
+                    TempData["ErrorMessage"] = "Invalid claim: Hours worked and hourly rate must be positive.";
+                    return RedirectToAction(nameof(Approve));
+                }
+
+                // Example of additional business rule: Max hours per week
+                if (claim.HoursWorked > 80)
+                {
+                    TempData["ErrorMessage"] = "Invalid claim: Hours worked exceed the maximum allowed per week.";
+                    return RedirectToAction(nameof(Approve));
+                }
+
+                // Approve the claim
+                claim.Status = ClaimStatus.Approved;
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"Claim {claim.ClaimId} approved on {DateTime.Now}."); // Log approval
             }
 
-            return RedirectToAction("Approve"); // Redirect to the Approve action
+            return RedirectToAction(nameof(Approve));
         }
 
-        // POST: /Claim/RejectClaim
+        // POST: Reject Claim
         [HttpPost]
         public async Task<IActionResult> RejectClaim(int claimId)
         {
-            var claim = await _context.Claims.FindAsync(claimId); // Find the claim by ID
+            var claim = await _context.Claims.Include(c => c.Lecturer).FirstOrDefaultAsync(c => c.ClaimId == claimId);
+
             if (claim != null)
             {
-                claim.Status = ClaimStatus.Rejected; // Set status to Rejected using enum
-                await _context.SaveChangesAsync(); // Save changes to the database
-                _logger.LogInformation($"Claim {claim.ClaimId} rejected by manager on {DateTime.Now}."); // Log rejection
+                // Reject the claim
+                claim.Status = ClaimStatus.Rejected;
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"Claim {claim.ClaimId} rejected on {DateTime.Now}."); // Log rejection
             }
 
-            return RedirectToAction("Approve"); // Redirect to the Approve action
+            return RedirectToAction(nameof(Approve));
         }
-
-
+        [Authorize(Roles = "Admin, ProgramCoordinator")]
+        // GET: Submitted Claims
         public IActionResult SubmittedClaims()
         {
-            var claims = _context.Claims.Include(c => c.Lecturer).ToList(); // or however you retrieve your claims
+            var claims = _context.Claims.Include(c => c.Lecturer).ToList();
             return View(claims);
         }
+
+        // GET: Claim List
         public IActionResult Index()
         {
-            var claims = _context.Claims.Include(c => c.Lecturer).ToList(); // Include Lecturer details
-            return View(claims); // Ensure you're returning the list of claims to the view
-        }
-        public IActionResult Approve()
-        {
             var claims = _context.Claims.Include(c => c.Lecturer).ToList();
-            return View(claims); // Ensure you're returning the list of claims to the view
+            return View(claims);
+        }
+        [Authorize(Roles = "Admin, ProgramCoordinator")]
+        public IActionResult HRView()
+        {
+            var approvedClaims = _context.Claims
+                .Include(c => c.Lecturer)
+                .Where(c => c.Status == ClaimStatus.Approved)
+                .ToList();
+
+            return View(approvedClaims); // Pass the list of approved claims to the view
         }
 
+
+        
+        }
     }
-}
+

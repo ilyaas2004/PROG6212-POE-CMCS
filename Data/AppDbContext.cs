@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PROG6212_POE_CMCS.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Claim> Claims { get; set; }
     public DbSet<Lecturer> Lecturers { get; set; }
@@ -11,9 +12,17 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Lecturer>()
-            .Property(l => l.HourlyRate)
-            .HasColumnType("decimal(18,2)"); // Adjust the precision and scale as needed
+      
+        // Configure relationships
+        modelBuilder.Entity<Claim>()
+            .HasOne(c => c.Lecturer)
+            .WithMany() // No navigation back to claims from Lecturer
+            .HasForeignKey(c => c.LecturerID);
+
+        // Configure FinalPayment column precision and scale
+        modelBuilder.Entity<Claim>()
+            .Property(c => c.FinalPayment)
+            .HasColumnType("decimal(18,2)"); // Or use .HasPrecision(18, 2)
 
         base.OnModelCreating(modelBuilder);
     }

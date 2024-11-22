@@ -1,0 +1,69 @@
+﻿@model IEnumerable<PROG6212_POE_CMCS.Models.Lecturer>
+
+<h2 class="text-center text-primary">Manage Lecturers</h2>
+
+<div class="container mt-4">
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered shadow-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Hourly Rate</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var lecturer in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" value="@lecturer.Name" id="LecturerName_@lecturer.LecturerID" />
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" value="@lecturer.HourlyRate" id="HourlyRate_@lecturer.LecturerID" step="0.01" />
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-primary btn-sm" onclick="updateLecturer(@lecturer.LecturerID)">Save</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Update lecturer details using AJAX
+        function updateLecturer(lecturerId) {
+            var name = document.getElementById('LecturerName_' + lecturerId).value;
+            var hourlyRate = parseFloat(document.getElementById('HourlyRate_' + lecturerId).value);
+
+            if (name.trim() === "" || isNaN(hourlyRate) || hourlyRate <= 0) {
+                alert("Invalid input. Please ensure all fields are filled correctly.");
+                return;
+            }
+
+            // Make AJAX call to update lecturer information
+            $.ajax({
+                url: '@Url.Action("UpdateLecturer", "Lecturer")',
+                type: 'POST',
+                data: {
+                    LecturerID: lecturerId,
+                    Name: name,
+                    HourlyRate: hourlyRate
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert("Lecturer information updated successfully.");
+                    } else {
+                        alert("Failed to update lecturer information.");
+                    }
+                },
+                error: function (error) {
+                    alert("An error occurred while updating lecturer information.");
+                }
+            });
+        }
+    </script>
+}
